@@ -17,7 +17,7 @@ greatestLoss = 0
 strGreatestProfit = ""
 strGreatestLoss = ""
 
-with open(os.path.join("Resources", "budget_data.csv")) as csvFile:
+with open(os.path.join("PyBank", "Resources", "budget_data.csv")) as csvFile:
 
     csvreader = csv.reader(csvFile, delimiter=',')
 
@@ -56,7 +56,7 @@ output = ("Financial Analysis\n"
 
 print(output)
 
-f = open(r"PyBank\FinancialAnalysis.txt", "w")
+f = open(r"PyBank\analysis\FinancialAnalysis.txt", "w")
 f.write(output)
 f.close()
 
