@@ -9,7 +9,9 @@ import csv
 
 totalVotes = 0
 candidates = {}
-winner = { 'Name': {'Votes': 0}}
+winnerVotes = 0
+winnerName = ''
+candidateResults = ''
 
 with open(os.path.join("PyPoll", "Resources", "election_data.csv")) as csvFile:
 
@@ -18,8 +20,7 @@ with open(os.path.join("PyPoll", "Resources", "election_data.csv")) as csvFile:
     # Skip First Row
     next(csvreader)
 
-    #Headers: Voter ID, County, Candidate
-
+    # Headers: Voter ID, County, Candidate
     for row in csvreader:
         totalVotes += 1
 
@@ -28,12 +29,35 @@ with open(os.path.join("PyPoll", "Resources", "election_data.csv")) as csvFile:
         else:
             candidates[row[2]] = {'Votes': 0, 'Percentage': 0}
 
-for candidate in candidates:
-    # TODO Figure this out. Still unsure how to effectivly loop through a dictionary
-    candidates[candidate]['Percentage'] = (candidates[candidate]['Votes']/totalVotes)*100
-    if candidates[candidate]['Votes'] > winner[0]['Votes']:
-        winner[0] = { 'Name': candidate {'Votes': candidates[candidate]['Votes']}}
+# '%.3f'%
 
-print(winner)
-print(candidates)
+for candidate in candidates:
+    # Calculate percentage of votes for each candidate
+    candidates[candidate]['Percentage'] = (candidates[candidate]['Votes']/totalVotes)*100
+
+    outPercentage = '{:.3f}'.format(round(candidates[candidate]['Percentage']))
+    outVotes = candidates[candidate]['Votes']
+
+    candidateResults = f'{candidateResults}{candidate}: {outPercentage}% ({outVotes})\n'
+
+    # TODO Figure this out. Still unsure how to effectivly loop through a dictionary
+    if candidates[candidate]['Votes'] > winnerVotes:
+        winnerVotes = candidates[candidate]['Votes']
+        winnerName = candidate
+
+output = ("Election Results\n"
+          "----------------------------\n"
+         f"Total Votes: {totalVotes}\n"
+         "----------------------------\n"
+         f"{candidateResults}"
+         "----------------------------\n"
+         f"Winner: {winnerName}\n"
+         "----------------------------"
+        )
+
+print(output)
+
+f = open(r"PyPoll\analysis\ElectionResults.txt", "w")
+f.write(output)
+f.close()
         
